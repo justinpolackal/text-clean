@@ -1,0 +1,106 @@
+{
+ "sources": [
+    {
+    "channel": "financial1",
+    "disabled": false,
+    "access" : {
+            "endpoint": "file",
+            "filesystem": "local",
+            "path": "D:\\git_repos\\text-clean\\data\\json_data",
+            "file_filter": ".json",
+            "reader": "json_file_reader",
+            "datatype": "train",
+            "data_element": "body",
+            "label_element": "",
+            "label_value_override": 1.0
+        },
+    "clean" : [
+            {"step": "remove_all_markup"},
+            {"step": "remove_html_encoded_chars"},
+            {"step": "remove_special_chars",
+             "special_chars": ["MINUS", "COMMA", "DQUOTE", "SQUOTE", "FSLASH", "BSLASH", "HASH", "AT", "EXCL", "CARAT", "AMP", "PCT", "DOLLAR", "TILDA", "APOS", "COLN", "SCOLN", "QMARK", "LT", "GT", "EQ", "PIPE", "CBRACE", "SBRKT","BRKT", "USCORE", "ASTRSK", "DOT", "PLUS"]
+            },
+            {"step": "remove_white_spaces",
+             "white_space_chars": ["NEWLINE", "CR", "FF", "TAB"]
+            }
+          ]
+    },
+   {
+   "channel": "reuters_news",
+   "disabled": false,
+   "access": {
+            "endpoint": "file",
+            "filesystem": "local",
+            "path": "D:\\git_repos\\text-clean\\data\\markup_data\\reuters_news",
+            "file_filter": ".sgm",
+            "reader": "markup_file_reader",
+            "datatype": "train",
+            "document_element": "reuters",
+            "data_element": "body",
+            "label_element": "",
+            "label_value_override": 0.0
+        },
+    "clean" : [
+            {"step": "remove_all_markup"},
+            {"step": "remove_html_encoded_chars"},
+            {"step": "remove_special_chars",
+             "special_chars": ["MINUS", "COMMA", "DQUOTE", "SQUOTE", "FSLASH", "BSLASH", "HASH", "AT", "EXCL", "CARAT", "AMP", "PCT", "DOLLAR", "TILDA", "APOS", "COLN", "SCOLN", "QMARK", "LT", "GT", "EQ", "PIPE", "CBRACE", "SBRKT","BRKT", "USCORE", "ASTRSK", "DOT", "PLUS"]
+            },
+            {"step": "remove_white_spaces",
+             "white_space_chars": ["NEWLINE", "CR", "FF", "TAB"]
+            }
+          ]
+   },
+   {
+   "channel": "positive_news",
+   "disabled": false,
+   "access": {
+            "endpoint": "file",
+            "filesystem": "local",
+            "path": "D:\\git_repos\\text-clean\\data\\text_data",
+            "file_filter": ".txt",
+            "reader": "text_file_reader",
+            "datatype": "train",
+            "document_separator": "[ENDDOC]",
+            "label_value_override": 0.0
+        },
+    "clean" : [
+            {"step": "remove_all_markup"},
+            {"step": "remove_html_encoded_chars"},
+            {"step": "remove_special_chars",
+             "special_chars": ["MINUS", "COMMA", "DQUOTE", "SQUOTE", "FSLASH", "BSLASH", "HASH", "AT", "EXCL", "CARAT", "AMP", "PCT", "DOLLAR", "TILDA", "APOS", "COLN", "SCOLN", "QMARK", "LT", "GT", "EQ", "PIPE", "CBRACE", "SBRKT","BRKT", "USCORE", "ASTRSK", "DOT", "PLUS"]
+            },
+            {"step": "remove_white_spaces",
+             "white_space_chars": ["NEWLINE", "CR", "FF", "TAB"]
+            }
+          ]
+   },
+   {
+   "channel": "negative_news",
+   "disabled": false,
+   "access": {
+            "endpoint": "csv",
+            "filesystem": "local",
+            "path": "D:\\git_repos\\text-clean\\data\\csv_data",
+            "file_filter": ".csv",
+            "reader": "csv_file_reader",
+            "datatype": "train",
+            "delimiter": "|",
+            "header_row": 0,
+            "data_column": 1,
+			"label_column": 2,
+            "label_value_override": 0.0
+        },
+    "clean" : [
+            {"step": "remove_all_markup"},
+            {"step": "remove_html_encoded_chars"},
+            {"step": "remove_special_chars",
+             "special_chars": ["MINUS", "COMMA", "DQUOTE", "SQUOTE", "FSLASH", "BSLASH", "HASH", "AT", "EXCL", "CARAT", "AMP", "PCT", "DOLLAR", "TILDA", "APOS", "COLN", "SCOLN", "QMARK", "LT", "GT", "EQ", "PIPE", "CBRACE", "SBRKT","BRKT", "USCORE", "ASTRSK", "DOT", "PLUS"]
+            },
+            {"step": "remove_white_spaces",
+             "white_space_chars": ["NEWLINE", "CR", "FF", "TAB"]
+            }
+          ]
+   }
+ ]
+}
