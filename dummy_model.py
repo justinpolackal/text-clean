@@ -7,7 +7,7 @@ from datakettle.serve_data import DataServer
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-conf_file_path = "D:\\git_repos\\sentiment_analysis"
+conf_file_path = "D:\\git_repos\\text-clean"
 conf_file_name = "feedconfig.json"
 
 full_path = os.path.join(conf_file_path, conf_file_name)
