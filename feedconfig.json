@@ -31,7 +31,7 @@
    "access": {
             "endpoint": "file",
             "filesystem": "local",
-            "path": "D:\\git_repos\\text-clean\\data\\markup_data\\reuters_news",
+            "path": "/Users/justinjose/work/personal/text-clean/data/markup_data/reuters_news",
             "file_filter": ".sgm",
             "reader": "markup_file_reader",
             "datatype": "train",
@@ -81,7 +81,7 @@
    "access": {
             "endpoint": "csv",
             "filesystem": "local",
-            "path": "D:\\git_repos\\text-clean\\data\\csv_data",
+            "path": "/Users/justinjose/work/personal/text-clean/data/csv_data",
             "file_filter": ".csv",
             "reader": "csv_file_reader",
             "datatype": "train",

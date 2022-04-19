@@ -18,29 +18,6 @@ class TextCleaner (object):
         self.logger = logging.getLogger(__name__)
 
     """
-    Read a text file in read mode as a single document and return 
-    """
-    def read_file (self, file_path):
-        fh = None
-        file_data = None
-
-        try:
-            fh = open(file_path, mode='r')
-
-            file_data = fh.read()
-
-            self.logger.info("Read: {} chars from {}.".format(len(file_data), file_path))
-
-        except IOError as ioerror:
-            self.logger.error ("Error Occurred while reading: ", exc_info=True)
-
-        finally:
-            if (fh):
-                fh.close()
-
-        return file_data
-
-    """
     Read stopwords for a given language from the stopwords file. 
     The file is assumed to be named as "stopwords_[languagecode].txt, where language code should be the two character iso code.
     E.g: "stopwords_en.txt" for English
@@ -93,7 +70,7 @@ class TextCleaner (object):
         if (data_str is None or len(data_str) < 1):
             return doc_list
 
-        start_tag = "<{}>".format(separator_markup.lower())
+        start_tag = "<{}".format(separator_markup.lower())
         end_tag   = "</{}>".format(separator_markup.lower())
 
         self.logger.info ("Start-End tags: {} {}".format(start_tag, end_tag))
@@ -141,7 +118,7 @@ class TextCleaner (object):
         :param container_tag: The markup tag within which the text of interest is packed. E.g: Text between <body> and </body>
         :return: List of strings
         """
-        start_tag = "<{}>".format(container_tag.lower())
+        start_tag = "<{}".format(container_tag.lower())
         end_tag   = "</{}>".format(container_tag.lower())
 
         if (doc is None):

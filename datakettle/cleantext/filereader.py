@@ -14,7 +14,7 @@ class TextFileReader (object):
         file_data = None
 
         try:
-            fh = open(file_path, mode='r')
+            fh = open(file_path, mode='r', encoding="utf8")
 
             file_data = fh.read()
 
