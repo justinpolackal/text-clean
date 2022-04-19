@@ -22,7 +22,7 @@ module structure:
      +-cleantext
 
 datakettle: Contains packages for reading text data from various file types - viz. JSON, markups(html, etc.), plain text files, csv
-            serve_data.DataServer class serves the data to our requirements
+            serve_data. DataServer class serves the data to our requirements
 
             HOW TO USE:
 
