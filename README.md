@@ -50,8 +50,10 @@ feedconfig.json: This is a configuration file in JSON format. We can configure v
 
             The "access" section:
             =====================
-            The access section for each channel defines from where the data will be read. As of now, the code can read only from local files.
-            The path can be specified and a file filter tells the module to read all files having that extension.
+            The access section for each channel defines from where the data will be read. Code can read from local files as well as web pages.
+            For local files, the path can be specified and a file filter tells the module to read all files having that extension.
+            When the access end point is http, it expects a list of urls in a text file, specified by "url_list_file". This way, it can be 
+            used to scrape a list of web urls. The feature is available only when the reader is "markup_file_reader"
 
             "reader" values can be:
               - json_file_reader - for JSON files
@@ -87,3 +89,5 @@ feedconfig.json: This is a configuration file in JSON format. We can configure v
             - remove_html_encoded_chars - Removes all encoded characters like &nbsp;  &#32; etc.
             - remove_special_chars - Removes special characters as specified in the special_chars array. This takes in pnemonic codes for each special character. We can selectively remove each.
             - remove_white_spaces - Removes white space characters. Specify white space characters as white_space_chars array. Again, pick and choose pnemonic codes for each
+
+NOTE: Refer feedconfig.json for example usages of the above configurations.

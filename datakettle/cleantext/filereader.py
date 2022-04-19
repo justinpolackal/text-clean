@@ -3,11 +3,12 @@ import numpy as np
 import pandas as pd
 import logging
 from . import utils
-
+import urllib3
 
 class TextFileReader (object):
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+        self.http_pool_manager = urllib3.PoolManager()
 
     def read_file (self, file_path):
         fh = None
@@ -55,3 +56,44 @@ class TextFileReader (object):
             self.logger.error("Error Occurred while reading: ", exc_info=True)
 
         return df
+
+    """
+    Read contents of a text file line by line
+    """
+    def read_file_by_line(self, file_path):
+        fh = None
+        file_data = None
+
+        try:
+            fh = open(file_path, mode='r', encoding="utf8")
+
+            file_data = fh.readlines()
+
+            self.logger.info("Read: {} lines from {}.".format(len(file_data), file_path))
+
+        except IOError as ioerror:
+            self.logger.error ("Error Occurred while reading: ", exc_info=True)
+
+        finally:
+            if (fh):
+                fh.close()
+
+        return file_data
+    """
+    Read contents of a web page using the given http url
+    """
+    def read_web_page(self, url):
+        file_data = None
+
+        try:
+            resp = self.http_pool_manager.request('GET', url)
+            assert resp.status == 200, f"Error reading from {url}"
+
+            file_data = str(resp.data, 'utf-8')
+
+        except AssertionError as msg:
+            self.logger.error(msg)
+        except Exception as e:
+            self.logger.error(e)
+
+        return file_data

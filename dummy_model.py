@@ -16,7 +16,7 @@ fr = TextFileReader()
 configdata = json.loads(fr.read_file(full_path))
 
 ds = DataServer (configdata)
-data_list, label_list = ds.fetch_data(channel='negative_news')
+data_list, label_list = ds.fetch_data(channel='fox_news')
 
 # Split Train, Test Data sets
 
@@ -27,5 +27,3 @@ data_list, label_list = ds.fetch_data(channel='negative_news')
 # test
 
 # calculate f1 score
-
-

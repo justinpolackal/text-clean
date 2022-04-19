@@ -89,6 +89,72 @@ class MarkupReader (object):
         return [], []
 
     """
+    Read web pages from a list of URLs provided in a text file
+    """
+    def read_url_list(self):
+        tfr = TextFileReader ()
+        tc = TextCleaner ()
+        access = self.source_config["access"]
+
+        file_data_list = []
+        label_value_list = []
+
+        # Read the list of URLs from the local text file defined by the config JSON.
+        # Each line in the text file is assumed to be a valid URL
+        urls_list_file = access["url_list_file"]
+        urls_list = tfr.read_file_by_line(urls_list_file)
+
+        for url in urls_list:
+            http_data = tfr.read_web_page(url)
+
+            if http_data is None:
+                self.logger.info(f"Reading URL: {url}: Error")
+                continue
+
+            read_status = f"{len(http_data)} chars"
+            self.logger.info(f"Reading URL: {url}: {read_status}")
+
+            # Marked up data that is read from the file may contain one or more markup blocks
+            # Split them into a list of markup docs
+
+            if "document_element" in access:
+                separator_markup = access["document_element"]
+                markup_docs = tc.split_multi_content_by_end_tag(http_data, separator_markup=separator_markup)
+            else:
+                markup_docs = [http_data]
+
+            data_element = access["data_element"]
+
+            # If a label is provided globally, read it from config.
+            # Label will be the class/prediction used for training purposes.
+            global_label_value = None
+            if "label_value_override" in access:
+                global_label_value = access["label_value_override"]
+
+            self.logger.info("Found {} markup documents ".format(len(markup_docs)))
+
+            # Iterate through each markup document
+            for markupdoc in markup_docs:
+
+                tagtext = tc.get_text_within_tags(markupdoc, container_tag=data_element)
+
+                if isinstance(tagtext, list):
+                    text_data = " ".join(tagtext)
+                else:
+                    text_data = tagtext
+
+                clean_data = self.cleanup_data(text_data)
+
+                if clean_data is not None and len(clean_data.strip()) > 0:
+                    file_data_list.append(clean_data)
+
+                    # if a label is provided globally, append it to labels list for each document
+                    if global_label_value is not None:
+                        label_value_list.append(global_label_value)
+
+        return file_data_list, label_value_list
+
+    """
     Cleanup file data list using the cleaning steps listed within the sources section of the feed config JSON
     """
     def cleanup_data (self, clean_data):
@@ -146,6 +212,11 @@ class MarkupReader (object):
         if (access["endpoint"] == "file") and (access["filesystem"] == "s3"):
             self.logger.info("Reading s3 markup files from {}".format(access["path"]))
             data_list, label_list = self.read_s3_files ()
+
+        # List of URLs to be scraped, placed in a text file
+        if access["endpoint"] == "http":
+            self.logger.info("Reading web pages for URLs in {}".format(access["url_list_file"]))
+            data_list, label_list = self.read_url_list ()
 
         return data_list, label_list
 

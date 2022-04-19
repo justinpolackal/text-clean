@@ -52,6 +52,54 @@
           ]
    },
    {
+   "channel": "bbc_news",
+   "disabled": false,
+   "access": {
+            "endpoint": "http",
+            "url_list_file": "/Users/justinjose/work/personal/text-clean/data/markup_data/bbc_news/bbc_news.txt",
+            "reader": "markup_file_reader",
+            "datatype": "train",
+            "document_element": "body",
+            "data_element": "article",
+            "label_element": "",
+            "label_value_override": 0.0
+        },
+    "clean" : [
+            {"step": "remove_all_markup"},
+            {"step": "remove_html_encoded_chars"},
+            {"step": "remove_special_chars",
+             "special_chars": ["MINUS", "COMMA", "DQUOTE", "SQUOTE", "FSLASH", "BSLASH", "HASH", "AT", "EXCL", "CARAT", "AMP", "PCT", "DOLLAR", "TILDA", "APOS", "COLN", "SCOLN", "QMARK", "LT", "GT", "EQ", "PIPE", "CBRACE", "SBRKT","BRKT", "USCORE", "ASTRSK", "DOT", "PLUS"]
+            },
+            {"step": "remove_white_spaces",
+             "white_space_chars": ["NEWLINE", "CR", "FF", "TAB"]
+            }
+          ]
+   },
+      {
+   "channel": "fox_news",
+   "disabled": false,
+   "access": {
+            "endpoint": "http",
+            "url_list_file": "/Users/justinjose/work/personal/text-clean/data/markup_data/fox_news/fox_news.txt",
+            "reader": "markup_file_reader",
+            "datatype": "train",
+            "document_element": "body",
+            "data_element": "article",
+            "label_element": "",
+            "label_value_override": 0.0
+        },
+    "clean" : [
+            {"step": "remove_all_markup"},
+            {"step": "remove_html_encoded_chars"},
+            {"step": "remove_special_chars",
+             "special_chars": ["MINUS", "COMMA", "DQUOTE", "SQUOTE", "FSLASH", "BSLASH", "HASH", "AT", "EXCL", "CARAT", "AMP", "PCT", "DOLLAR", "TILDA", "APOS", "COLN", "SCOLN", "QMARK", "LT", "GT", "EQ", "PIPE", "CBRACE", "SBRKT","BRKT", "USCORE", "ASTRSK", "DOT", "PLUS"]
+            },
+            {"step": "remove_white_spaces",
+             "white_space_chars": ["NEWLINE", "CR", "FF", "TAB"]
+            }
+          ]
+   },
+   {
    "channel": "positive_news",
    "disabled": false,
    "access": {
