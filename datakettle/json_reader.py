@@ -50,25 +50,18 @@ class JsonReader (object):
             # JSON read from the file can be a single object or an array of objects.
             # Check if this is a single JSON object
             if isinstance(data, dict):
-
                 # Label value to be used for training purposes.
                 label_value = None
-                if "label_element" in data:
+                if global_label_value is not None:
+                    label_value = global_label_value
+                elif "label_element" in data:
                     label_value = utils.if_null(data["label_element"], None)
 
-                if (data_element in data):
+                if data_element in data:
                     text_data = data[data_element]
                     clean_data = self.cleanup_data(text_data)
 
-                    # After cleanup, if there is valid text, then append to the list of documents
-                    if clean_data is not None and len(clean_data.strip()) > 0:
-                        file_data_list.append(clean_data)
-
-                        # Append the label value as well. Take care of global override, if provided
-                        if global_label_value is not None:
-                            label_value_list.append(global_label_value)
-                        else:
-                            label_value_list.append(label_value)
+                file_data_list.append({"content":clean_data, "label":label_value})
 
             # Check if this is an array of JSON objects. Then iterate through each object
             if isinstance(data, list):
@@ -76,25 +69,18 @@ class JsonReader (object):
 
                     # Label value to be used for training purposes.
                     label_value = None
-                    if "label_element" in jsonobj:
+                    if global_label_value is not None:
+                        label_value = global_label_value
+                    elif "label_element" in jsonobj:
                         label_value = utils.if_null(jsonobj["label_element"], None)
 
                     if data_element in jsonobj:
-
                         text_data = jsonobj[data_element]
                         clean_data = self.cleanup_data(text_data)
 
-                        # After cleanup, if there is valid text, then append to the list of documents
-                        if clean_data is not None and len(clean_data.strip()) > 0:
-                            file_data_list.append(clean_data)
+                    file_data_list.append({"content": clean_data, "label": label_value})
 
-                            # Append the label value as well. Take care of global override, if provided
-                            if global_label_value is not None:
-                                label_value_list.append(global_label_value)
-                            else:
-                                label_value_list.append(label_value)
-
-        return file_data_list, label_value_list
+        return file_data_list
 
     """
     Read json files from an S3 path
@@ -126,7 +112,9 @@ class JsonReader (object):
                     special_chars = cstep["special_chars"]
                 else:
                     special_chars = self.def_special_chars
-                clean_data = tc.remove_special_chars (special_chars, clean_data)
+
+                replace_char = cstep["replace_char"] if cstep.get("replace_char") else ''
+                clean_data = tc.remove_special_chars (special_chars, clean_data, replace_char=replace_char)
 
             if stepname == "remove_white_spaces":
                 if "white_space_chars" in cstep:
@@ -151,11 +139,11 @@ class JsonReader (object):
         # Read data from JSON files
         if (access["endpoint"] == "file") and (access["filesystem"] == "local"):
             self.logger.info ("Reading local json files from {}".format(access["path"]))
-            data_list, label_list = self.read_local_files ()
+            data_list = self.read_local_files ()
 
         if (access["endpoint"] == "file") and (access["filesystem"] == "s3"):
             self.logger.info("Reading s3 json files from {}".format(access["path"]))
-            data_list, label_list = self.read_s3_files ()
+            data_list = self.read_s3_files ()
 
-        return data_list, label_list
+        return data_list
 

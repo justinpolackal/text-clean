@@ -57,17 +57,10 @@ class TextReader (object):
 
             # Iterate through each markup document
             for textdoc in multi_docs:
-
                 clean_data = self.cleanup_data(textdoc)
+                file_data_list.append({"content":clean_data, "label":global_label_value})
 
-                if clean_data is not None and len(clean_data.strip()) > 0:
-                    file_data_list.append(clean_data)
-
-                    # if a label is provided globally, append it to labels list for each document
-                    if global_label_value is not None:
-                        label_value_list.append(global_label_value)
-
-        return file_data_list, label_value_list
+        return file_data_list
 
     """
     Read json files from an S3 path
@@ -91,8 +84,6 @@ class TextReader (object):
 
             stepname = cstep["step"]
 
-            #self.logger.info("Processing: {}".format(stepname))
-
             if stepname == "remove_all_markup":
                 clean_data = tc.remove_all_markup (doc=clean_data, valid_markup=False)
 
@@ -112,7 +103,8 @@ class TextReader (object):
                 else:
                     white_space_chars = self.def_white_space_chars
 
-                clean_data = tc.remove_white_spaces(white_space_chars=white_space_chars, doc=clean_data)
+                replace_char = cstep["replace_char"] if cstep.get("replace_char") else ''
+                clean_data = tc.remove_white_spaces(white_space_chars=white_space_chars, doc=clean_data, replace_char=replace_char)
 
         return clean_data
 
@@ -129,11 +121,11 @@ class TextReader (object):
         # Read data from markup files
         if (access["endpoint"] == "file") and (access["filesystem"] == "local"):
             self.logger.info ("Reading local text files from {}".format(access["path"]))
-            data_list, label_list = self.read_local_files ()
+            data_list = self.read_local_files ()
 
         if (access["endpoint"] == "file") and (access["filesystem"] == "s3"):
             self.logger.info("Reading s3 text files from {}".format(access["path"]))
-            data_list, label_list = self.read_s3_files ()
+            data_list = self.read_s3_files ()
 
-        return data_list, label_list
+        return data_list
 

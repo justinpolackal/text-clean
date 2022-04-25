@@ -6,6 +6,7 @@ from .json_reader import JsonReader
 from .markup_reader import MarkupReader
 from .text_reader import TextReader
 from .csv_reader import CSVReader
+from .html_reader import HTMLReader
 
 class DataServer (object):
     def __init__(self, config):
@@ -36,35 +37,26 @@ class DataServer (object):
 
                 if access["reader"] == "json_file_reader":
                     jsreader = JsonReader(source_config=source)
-                    data, label = jsreader.read_json_data()
+                    data = jsreader.read_json_data()
                     data_list.extend (data)
-                    label_list.extend(label)
                     self.logger.info("Fetched data {} items ".format(len(data)))
 
-                if access["reader"] == "markup_file_reader":
-                    mkreader = MarkupReader(source_config=source)
-                    data, label = mkreader.read_markup_data()
+                if access["reader"] == "html_reader":
+                    htmlreader = HTMLReader(source_config=source)
+                    data = htmlreader.read_html_data()
                     data_list.extend(data)
-                    label_list.extend(label)
                     self.logger.info("Fetched data {} items ".format(len(data)))
 
                 if access["reader"] == "text_file_reader":
                     txtreader = TextReader(source_config=source)
-                    data, label = txtreader.read_text_data()
+                    data = txtreader.read_text_data()
                     data_list.extend(data)
-                    label_list.extend(label)
                     self.logger.info("Fetched data {} items ".format(len(data)))
 
                 if access["reader"] == "csv_file_reader":
                     csvreader = CSVReader(source_config=source)
-                    data, label = csvreader.read_csv_data()
+                    data = csvreader.read_csv_data()
                     data_list.extend(data)
-                    label_list.extend(label)
                     self.logger.info("Fetched data {} items ".format(len(data)))
 
-                if access["reader"] == "benzinga_reader":
-                    self.logger.error("Not implemented yet")
-                    pass
-
-
-        return data_list, label_list
+        return data_list
